@@ -54,7 +54,13 @@ else
     norm = trapz(y,trapz(x,full_disk,2),1);
     clear X Y
     
-    [X,Y,T] = ndgrid(x,y,t-t0);
+    shifted_t = t-t0;
+    for ii = 1:numel(shifted_t)
+        if shifted_t(ii) < 0
+            shifted_t(ii) = 0;
+        end
+    end
+    [X,Y,T] = ndgrid(x,y,shifted_t);
     u = zeros(numel(x),numel(y),numel(t));
     for ii = 1:nmax
         u = u + c0(ii).*besselj(0,j0(ii)/A.*sqrt(X.^2+Y.^2)).*exp(-(j0(ii)/A)^2*D.*T);
@@ -62,7 +68,7 @@ else
     u = (C-u).*radius_mask.*pinhole_mask.*gaussian_beam;
     out = squeeze(trapz(y,trapz(x,u,1),2))*C/norm;
     for ii = 1:numel(out)
-       if isnan(out(ii)) || out(ii) < 0
+       if isnan(out(ii)) || out(ii) < 0 || shifted_t(ii) == 0 || ii == find(shifted_t,1)
            out(ii) = 0;
        end
     end

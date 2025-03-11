@@ -4,11 +4,10 @@
 cd ~  % This is here because sometimes MATLAB gets confused 
 % finding the Isilon folder so you have to reset the current folder to
 % somewhere on the disk first.
-spectra_range = [1:136]; 
-% for 2/14, 114-116, 404 are bad data
-cd('/Volumes/CHEM-SGR/sgr-ftir.chem.pitt.edu/2025/2025-02-19')
-[data1,freq] = LoadSpectra('/Volumes/CHEM-SGR/sgr-ftir.chem.pitt.edu/2025/2025-02-19',...
-    'PMIMNTF2_20250219_35C_',spectra_range);
+spectra_range = [1:131]; 
+cd('/Volumes/CHEM-SGR/sgr-ftir.chem.pitt.edu/2025/2025-02-26')
+[data1,freq] = LoadSpectra('/Volumes/CHEM-SGR/sgr-ftir.chem.pitt.edu/2025/2025-02-26',...
+    'PMNTF2EMIM_20250226_75C_',spectra_range);
 freq = freq(:,1);
 
 if freq(2) - freq(1) > 0
@@ -20,28 +19,28 @@ end
 sub_data = data1 - data1(:,1);
 
 % INITIALIZE OBJECT
-f = FTIRexperiment(sub_data,freq,0,25,2250,180,"PMIM NTF2","2025-02-19","Matt");
-f = f.timeAxis('/Volumes/CHEM-SGR/sgr-ftir.chem.pitt.edu/2025/2025-02-19',...
-    'PMIMNTF2_20250219_35C_',spectra_range);
+f = FTIRexperiment(sub_data,freq,0,25,1500,30,"PMIM NTF2","2025-02-26","Matt");
+f = f.timeAxis('/Volumes/CHEM-SGR/sgr-ftir.chem.pitt.edu/2025/2025-02-26',...
+    'PMNTF2EMIM_20250226_75C_',spectra_range);
 
 fprintf("Successfully imported " + size(f.data,2) + " spectra.\n")
 
 clear spectra_range
 %% make initial guesses
 % have the user select which spectrum to guess from
-ii = 136;
+ii = 115;
 
 % set the fit range
 range1 = [2290 2390];
 
 % set starting point using values from the user
-center = 2342;
+center = 2340;
 wg = 1.7; 
 wl = 1.7;
-a1 = 2.3;  % main peak height
+a1 = 1.75;  % main peak height
 a2 = 0.07; % expected Boltzmann factor for bend
 a3 = 0.0; % gas lines
-c0 = 0.0;
+c0 = 0.005;
 c1 = 0; % baseline slope
 
 %fit function requires fliipped inputs

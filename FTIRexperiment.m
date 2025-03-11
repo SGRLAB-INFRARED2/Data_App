@@ -138,8 +138,8 @@ classdef FTIRexperiment
             %initial guess from inputs do this before calling function
             sp = [center,wg,wl,a1,a2,a3,c0,c1];
             %upper and lower bounds
-            lb = [2300, 0.5, 0.5,   0, 0.0,   0, -10, -1];
-            ub = [2400, 4,   4,   100, 0.2, inf,  10,  1];
+            lb = [2300, 0.5, 0.5,   0, -1,   0, -10, -1];
+            ub = [2400, 4,   4,   100,  1, inf,  10,  1];
             
             opts = fitoptions('Method','NonlinearLeastSquares',...
                 'Lower',lb,'Upper',ub,'StartPoint',sp,...
